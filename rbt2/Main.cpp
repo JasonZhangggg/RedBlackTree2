@@ -31,6 +31,7 @@ void DeleteCase4(Node*&);
 void DeleteCase5(Node*&);
 void DeleteCase6(Node*&);
 Node* search(Node*, int);
+void DeleteNode(Node*&, Node*&);
 int main(){
 	//declare head
 	Node* head = NULL;
@@ -260,6 +261,16 @@ Node* search(Node* h, int key){
 		Node* r = h->getRight();
 		return search(r, key);
 	}
+
+}
+void DeleteNode(Node*& h, Node* &n){
+	if(h == n){
+		delete n;
+		n == NULL;
+		return;
+	}
+	DeleteOneChild(n);
+
 
 }
 void replaceNode(Node* &n, Node* &child){
