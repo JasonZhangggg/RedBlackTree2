@@ -328,7 +328,6 @@ void DeleteOneChild(Node* &n){
 			else{
 				child->getParent()->setRight(NULL);
 			}
-			cout<<"bad"<<endl;
 		}
 	}
 }
@@ -380,8 +379,6 @@ void DeleteCase4(Node* &n){
 	}
 }
 void DeleteCase5(Node* &n){
-	cout<<n->getSibling()->getRight()->getColor()<<endl;
-	cout<<n->getSibling()->getLeft()->getColor()<<endl;
 	Node* s = n->getSibling();
 	if(s->getColor() == 2){
 		if((n == n->getParent()->getLeft()) && (s->getRight()->getColor() == 2) && s->getLeft()->getColor() == 1){

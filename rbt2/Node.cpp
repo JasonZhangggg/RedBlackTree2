@@ -54,6 +54,7 @@ void Node::setColor(int newColor){
 }
 //get color
 int Node::getColor(){
+	if(this == NULL) return 2;
 	return color;
 }
 //psudo-code from https://en.wikipedia.org/wiki/Red-black_tree
