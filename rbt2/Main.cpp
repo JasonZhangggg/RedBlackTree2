@@ -283,7 +283,7 @@ void DeleteNode(Node*& h, Node* &n){
 		n->setVal(left->getVal());
 		DeleteOneChild(left);
 		return;
-	
+
 	}
 	DeleteOneChild(n);
 
@@ -309,6 +309,7 @@ void DeleteOneChild(Node* &n){
 	}
 	if(child == NULL){
 		child = new Node(-1);
+		child->setColor(2);
 	}
 	replaceNode(n, child);
 	if(n->getColor() == 2){
@@ -320,11 +321,14 @@ void DeleteOneChild(Node* &n){
 		}
 	}
 	if(child->getVal() == -1){
-		if(child = child->getParent()->getLeft()){
-			child->getParent()->setLeft(NULL);
-		}
-		else{
-			child->getParent()->setRight(NULL);
+		if(child->getParent() != NULL){
+			if(child == child->getParent()->getLeft()){
+				child->getParent()->setLeft(NULL);
+			}
+			else{
+				child->getParent()->setRight(NULL);
+			}
+			cout<<"bad"<<endl;
 		}
 	}
 }
@@ -372,10 +376,12 @@ void DeleteCase4(Node* &n){
 		n->getParent()->setColor(2);
 	}
 	else{
-		DeleteCase4(n);
+		DeleteCase5(n);
 	}
 }
 void DeleteCase5(Node* &n){
+	cout<<n->getSibling()->getRight()->getColor()<<endl;
+	cout<<n->getSibling()->getLeft()->getColor()<<endl;
 	Node* s = n->getSibling();
 	if(s->getColor() == 2){
 		if((n == n->getParent()->getLeft()) && (s->getRight()->getColor() == 2) && s->getLeft()->getColor() == 1){
