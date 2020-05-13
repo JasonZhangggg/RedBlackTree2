@@ -32,6 +32,8 @@ void DeleteCase5(Node*&);
 void DeleteCase6(Node*&);
 Node* search(Node*, int);
 void DeleteNode(Node*&, Node*&);
+Node* getRoot(Node*);
+Node* getSuc(Node*);
 int main(){
 	//declare head
 	Node* head = NULL;
@@ -111,7 +113,7 @@ int main(){
 				cout<<"The element was not found"<<endl;
 			}
 			else{
-				DeleteOneChild(n);
+				DeleteNode(head, n);
 			}
 		}
 		else if(strcmp(input, "QUIT") == 0){
@@ -182,6 +184,7 @@ void repairTree(Node* &n, Node* &head){
 	}
 
 }
+
 //set color to reed
 void case1(Node* &n){
 	n->setColor(2);
@@ -250,13 +253,16 @@ void traverse(Node* head, int depth){
 	if(head->getLeft() != NULL) traverse(head->getLeft(), depth+1);
 }
 Node* search(Node* h, int key){
+	//if we found the key, return the node
 	if(h == NULL || h->getVal() == key){
 		return h;
 	}
+	//if the key is less then the val, search left
 	if(key<h->getVal()){
 		Node* l = h->getLeft();
 		return search(l, key);
 	}
+	//if the key is greater then the val, search right
 	else if(key > h->getVal()){
 		Node* r = h->getRight();
 		return search(r, key);
@@ -264,20 +270,30 @@ Node* search(Node* h, int key){
 
 }
 void DeleteNode(Node*& h, Node* &n){
-	if(h == n){
+	//if it is the root case
+	if(h == n && n->getLeft() == NULL && n->getRight() == NULL){
 		delete n;
-		n == NULL;
+		n = NULL;
 		return;
 	}
+	//if there are 2 childern
+	else if(n->getLeft() != NULL && n->getRight() != NULL){
+		Node* left = n->getLeft();
+		left = getSuc(left);
+		n->setVal(left->getVal());
+		DeleteOneChild(left);
+		return;
+	
+	}
 	DeleteOneChild(n);
-
 
 }
 void replaceNode(Node* &n, Node* &child){
 	child->setParent(n->getParent());
-	cout<<"here"<<endl;
-	if(n == n->getParent()->getLeft()){
-		cout<<"here2"<<endl;
+	if(n->getParent() == NULL){
+		n = child;
+	}
+	else if(n == n->getParent()->getLeft()){
 		n->getParent()->setLeft(child);
 	} else{
 		n->getParent()->setRight(child);
@@ -291,6 +307,9 @@ void DeleteOneChild(Node* &n){
 	else{
 		child = n->getRight();
 	}
+	if(child == NULL){
+		child = new Node(-1);
+	}
 	replaceNode(n, child);
 	if(n->getColor() == 2){
 		if(child->getColor() == 1){
@@ -300,9 +319,21 @@ void DeleteOneChild(Node* &n){
 			DeleteCase1(child);
 		}
 	}
-	delete n;
+	if(child->getVal() == -1){
+		if(child = child->getParent()->getLeft()){
+			child->getParent()->setLeft(NULL);
+		}
+		else{
+			child->getParent()->setRight(NULL);
+		}
+	}
 }
-
+Node* getRoot(Node* n){
+	if(n->getParent() != NULL){
+		getRoot(n->getParent());
+	}
+	return n;
+}
 void DeleteCase1(Node* &n){
 	if(n->getParent() != NULL){
 		DeleteCase2(n);
@@ -374,4 +405,10 @@ void DeleteCase6(Node* &n){
 		n->getParent()->rotateRight();
 	}
 
+}
+Node* getSuc(Node* head){
+	if(head->getRight() == NULL){
+		return head;
+	}
+	getSuc(head->getRight());
 }
